@@ -397,9 +397,9 @@ button {
 
 .hud-btn:hover, .hud-btn:active {
   transform: scale(1.08);
-  border-color: var(--neon-cyan);
-  color: var(--neon-cyan);
-  box-shadow: 0 0 15px rgba(0, 245, 212, 0.3);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
 .hud-btn .icon-sound-on,
