@@ -349,7 +349,7 @@ button {
   z-index: 20;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: calc(env(safe-area-inset-top, 18px) + 28px) 20px 0 20px;
 }
 
