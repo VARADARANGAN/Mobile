@@ -549,6 +549,7 @@ button {
   justify-content: center;
   padding: 0 16px;
   padding-bottom: 22px;
+  margin-top: auto;
   cursor: pointer;
   touch-action: pan-y;
   outline: none;
