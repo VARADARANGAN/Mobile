@@ -1,0 +1,1096 @@
+/* ==========================================================================
+   AURA // IMMERSIVE MOBILE EXPERIENCE
+   Design System & Styling
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Design Tokens & Variables
+   -------------------------------------------------------------------------- */
+:root {
+  /* Color Palette: Deep Space & Cyber Luminescence */
+  --bg-space: #030712;
+  --bg-deep: #070d1e;
+  --bg-surface: rgba(15, 23, 42, 0.65);
+  --bg-glass: rgba(255, 255, 255, 0.035);
+  --bg-glass-card: rgba(255, 255, 255, 0.04);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-glow: rgba(0, 245, 212, 0.35);
+
+  /* Brand Accents */
+  --neon-cyan: #00f5d4;
+  --neon-cyan-glow: rgba(0, 245, 212, 0.65);
+  --electric-violet: #7928ca;
+  --electric-violet-glow: rgba(121, 40, 202, 0.55);
+  --cyber-magenta: #ff0080;
+  --accent-laser: #38bdf8;
+  --accent-white: #ffffff;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+
+  /* Typography */
+  --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Space Grotesk', var(--font-sans);
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Geometry & Physics */
+  --phone-width: 390px;
+  --phone-height: 844px;
+  --radius-phone: 50px;
+  --radius-card: 20px;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* --------------------------------------------------------------------------
+   2. Reset & Base Setup
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-space);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  outline: none;
+}
+
+/* --------------------------------------------------------------------------
+   3. Desktop Simulator & Phone Frame Wrapper
+   -------------------------------------------------------------------------- */
+.device-simulator {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 20%, #111827 0%, #030712 70%);
+}
+
+/* Ambient cosmic backdrop on desktop */
+.device-simulator::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  left: 20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(121, 40, 202, 0.15) 0%, rgba(0, 245, 212, 0.05) 50%, transparent 70%);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.device-simulator::after {
+  content: '';
+  position: absolute;
+  bottom: -15%;
+  right: 15%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(0, 245, 212, 0.12) 0%, transparent 60%);
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Desktop Header Controls */
+.desktop-controls-bar {
+  display: none; /* Shown via media query on desktop */
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 480px;
+  padding: 12px 20px;
+  margin-bottom: 12px;
+  z-index: 100;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.desktop-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pulse-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--neon-cyan);
+  box-shadow: 0 0 10px var(--neon-cyan);
+  animation: pulseLight 2s infinite;
+}
+
+.desktop-title {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+  transition: all 0.25s ease;
+}
+
+.mode-btn:hover {
+  background: rgba(0, 245, 212, 0.15);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+
+/* Phone Bezel Frame */
+.phone-frame {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-height: 100dvh;
+  overflow: hidden;
+  background-color: #000000;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dynamic Island hardware detail */
+.phone-speaker-island {
+  display: none; /* Enabled on desktop mockup */
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 30px;
+  background-color: #000000;
+  border-radius: 20px;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 14px;
+  gap: 8px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.island-camera {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #0e1e38 20%, #000 70%);
+  box-shadow: inset 0 0 2px rgba(0, 245, 212, 0.4);
+}
+
+.island-mic {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #111;
+}
+
+/* --------------------------------------------------------------------------
+   4. Main Container Component
+   -------------------------------------------------------------------------- */
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  background-color: var(--bg-space);
+  /* Hide standard scrollbars */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Base Section */
+.section {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --------------------------------------------------------------------------
+   5. Section 1: Video Introduction
+   -------------------------------------------------------------------------- */
+.section-video {
+  justify-content: space-between;
+  background-color: #000000;
+}
+
+/* Fullscreen Video & Canvas Wrapper */
+.video-media-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.fullscreen-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  filter: contrast(1.05) saturate(1.1) brightness(0.95);
+  transition: opacity 0.8s ease;
+}
+
+/* Procedural Canvas Fallback */
+.video-canvas-fallback {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* Video Tint & Cinematic Vignette */
+.video-overlay-tint {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 35%, rgba(3, 7, 18, 0.75) 100%);
+  z-index: 3;
+  pointer-events: none;
+}
+
+.video-vignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, 
+    rgba(3, 7, 18, 0.75) 0%, 
+    rgba(3, 7, 18, 0.1) 25%, 
+    rgba(3, 7, 18, 0.1) 65%, 
+    rgba(3, 7, 18, 0.9) 100%
+  );
+  z-index: 4;
+  pointer-events: none;
+}
+
+.scanline-overlay {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  opacity: 0.4;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Video Top HUD Bar */
+.video-hud {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: calc(env(safe-area-inset-top, 18px) + 28px) 20px 0 20px;
+}
+
+.hud-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(3, 7, 18, 0.65);
+  backdrop-filter: blur(12px);
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--neon-cyan);
+  box-shadow: 0 0 8px var(--neon-cyan);
+  animation: pulseDot 1.5s infinite;
+}
+
+.hud-mono {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--neon-cyan);
+  letter-spacing: 0.12em;
+}
+
+.hud-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(3, 7, 18, 0.65);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  transition: all 0.3s var(--ease-spring);
+}
+
+.hud-btn:hover, .hud-btn:active {
+  transform: scale(1.08);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 245, 212, 0.3);
+}
+
+.hud-btn .icon-sound-on,
+.hud-btn.muted .icon-sound-off {
+  display: block;
+}
+
+.hud-btn .icon-sound-off,
+.hud-btn.muted .icon-sound-on {
+  display: none;
+}
+
+/* Center Cinematic Branding */
+.video-center-brand {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: 14px;
+  opacity: 0.85;
+  transition: opacity 0.5s ease;
+}
+
+.brand-sub {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+}
+
+.brand-code {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  color: var(--neon-cyan);
+  margin-top: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   6. Audio Fallback Interaction: "Tap to Enable Sound"
+   -------------------------------------------------------------------------- */
+.audio-prompt-container {
+  position: relative;
+  z-index: 25;
+  display: flex;
+  justify-content: center;
+  padding: 0 20px;
+  margin-bottom: 12px;
+  transition: opacity 0.5s ease, transform 0.5s var(--ease-out-expo);
+}
+
+.audio-prompt-container.hidden {
+  opacity: 0;
+  transform: scale(0.92) translateY(12px);
+  pointer-events: none;
+  display: none;
+}
+
+.audio-prompt-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: rgba(8, 14, 30, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 245, 212, 0.5);
+  box-shadow: 0 8px 25px -4px rgba(0, 0, 0, 0.8), 
+              0 0 16px rgba(0, 245, 212, 0.25);
+  cursor: pointer;
+  transition: all 0.3s var(--ease-spring);
+}
+
+.audio-prompt-pill:active {
+  transform: scale(0.96);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 25px rgba(0, 245, 212, 0.5);
+}
+
+.pill-inner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 2;
+}
+
+.pill-sound-waves {
+  display: flex;
+  align-items: flex-end;
+  gap: 2.5px;
+  height: 14px;
+}
+
+.wave-bar {
+  width: 2.5px;
+  background-color: var(--neon-cyan);
+  border-radius: 2px;
+  animation: soundBarWave 1.2s ease-in-out infinite alternate;
+}
+
+.wave-bar.bar-1 { height: 6px; animation-delay: 0.1s; }
+.wave-bar.bar-2 { height: 14px; animation-delay: 0.3s; }
+.wave-bar.bar-3 { height: 9px; animation-delay: 0.2s; }
+.wave-bar.bar-4 { height: 12px; animation-delay: 0.4s; }
+
+.pill-text {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(0, 245, 212, 0.4);
+}
+
+/* Pulsing radar rings */
+.pulse-ring {
+  position: absolute;
+  inset: -5px;
+  border-radius: 999px;
+  border: 1.5px solid var(--neon-cyan);
+  opacity: 0;
+  pointer-events: none;
+  animation: radarRing 2.4s infinite cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.pulse-ring.ring-2 {
+  animation-delay: 1.2s;
+}
+
+/* --------------------------------------------------------------------------
+   7. Scroll / Explore Indicator
+   -------------------------------------------------------------------------- */
+.swipe-indicator-wrapper {
+  position: relative;
+  z-index: 25;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  padding-bottom: 22px;
+  cursor: pointer;
+  touch-action: pan-y;
+  outline: none;
+}
+
+.chevron-flow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--neon-cyan);
+  opacity: 0.4;
+  transform: translateY(0);
+  transition: all 0.3s ease;
+  animation: floatUp 2s infinite ease-in-out;
+}
+
+.chevron-1 { animation-delay: 0.3s; opacity: 0.95; }
+.chevron-2 { animation-delay: 0.15s; opacity: 0.65; }
+.chevron-3 { animation-delay: 0s; opacity: 0.35; }
+
+.swipe-label-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(3, 7, 18, 0.65);
+  backdrop-filter: blur(14px);
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s var(--ease-spring);
+}
+
+.swipe-indicator-wrapper:hover .swipe-label-container,
+.swipe-indicator-wrapper:active .swipe-label-container {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 20px rgba(0, 245, 212, 0.4);
+  transform: translateY(-3px);
+}
+
+.swipe-arrow-prefix {
+  color: var(--neon-cyan);
+  font-weight: 800;
+  font-size: 1rem;
+  animation: bounceArrow 1.6s infinite ease-in-out;
+}
+
+.swipe-text {
+  font-family: var(--font-display);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.swipe-touch-bar {
+  width: 40px;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+}
+
+.swipe-indicator-wrapper:hover .swipe-touch-bar {
+  background-color: var(--neon-cyan);
+  width: 58px;
+  box-shadow: 0 0 10px var(--neon-cyan);
+}
+
+/* --------------------------------------------------------------------------
+   8. Section 2: Welcome Screen
+   -------------------------------------------------------------------------- */
+.section-welcome {
+  background-color: var(--bg-deep);
+  position: relative;
+  justify-content: flex-start;
+  padding: calc(env(safe-area-inset-top, 20px) + 24px) 20px calc(env(safe-area-inset-bottom, 20px) + 24px) 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.section-welcome::-webkit-scrollbar {
+  display: none;
+}
+
+/* Canvas & Ambient Backing */
+.welcome-bg-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.45;
+  animation: orbFloat 14s infinite alternate ease-in-out;
+}
+
+.orb-cyan {
+  top: 10%;
+  right: -20%;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, var(--neon-cyan-glow) 0%, transparent 70%);
+}
+
+.orb-violet {
+  bottom: 15%;
+  left: -20%;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, var(--electric-violet-glow) 0%, transparent 70%);
+  animation-delay: -7s;
+}
+
+.ambient-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Welcome Content Layout */
+.welcome-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  width: 100%;
+}
+
+/* Eyebrow badge */
+.system-eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.eyebrow-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(0, 245, 212, 0.08);
+  border: 1px solid rgba(0, 245, 212, 0.25);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--neon-cyan);
+  letter-spacing: 0.08em;
+}
+
+.pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--neon-cyan);
+  box-shadow: 0 0 6px var(--neon-cyan);
+}
+
+.eyebrow-coords {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+/* Kinetic WELCOME Heading */
+.welcome-title {
+  font-family: var(--font-sans);
+  font-size: clamp(3.2rem, 14vw, 4.4rem);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: nowrap;
+  perspective: 800px;
+}
+
+.char-wrap {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.char {
+  display: inline-block;
+  background: linear-gradient(135deg, #ffffff 15%, #a5b4fc 50%, #00f5d4 85%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transform: translateY(115%) rotateX(-50deg);
+  opacity: 0;
+  filter: blur(8px);
+  transition: 
+    transform 0.9s var(--ease-out-expo),
+    opacity 0.8s ease,
+    filter 0.8s ease;
+  transition-delay: calc(var(--i) * 0.06s + 0.15s);
+  text-shadow: 0 0 30px rgba(0, 245, 212, 0.2);
+}
+
+/* Activated State via Intersection Observer */
+.section-welcome.in-view .welcome-title .char {
+  transform: translateY(0) rotateX(0deg);
+  opacity: 1;
+  filter: blur(0);
+}
+
+.welcome-subtext {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 28px;
+  max-width: 360px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease 0.6s, transform 0.8s var(--ease-out-expo) 0.6s;
+}
+
+.section-welcome.in-view .welcome-subtext {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Feature Showcase Cards */
+.welcome-cards-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 32px;
+  width: 100%;
+}
+
+.glass-card {
+  position: relative;
+  background: var(--bg-glass-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  padding: 18px 20px;
+  overflow: hidden;
+  transition: all 0.35s var(--ease-out-expo);
+  opacity: 0;
+  transform: translateY(25px);
+}
+
+.glass-card:nth-child(1) { transition-delay: 0.75s; }
+.glass-card:nth-child(2) { transition-delay: 0.85s; }
+.glass-card:nth-child(3) { transition-delay: 0.95s; }
+
+.section-welcome.in-view .glass-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.glass-card:active {
+  transform: scale(0.98);
+  border-color: rgba(0, 245, 212, 0.4);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.card-glow {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(0, 245, 212, 0.18) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.card-index {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--neon-cyan);
+}
+
+.card-badge {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+}
+
+.card-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 6px;
+}
+
+.card-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Action Controls Panel */
+.welcome-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+  margin-bottom: 24px;
+  width: 100%;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px 20px;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  transition: all 0.3s var(--ease-spring);
+}
+
+.action-primary {
+  background: linear-gradient(135deg, var(--neon-cyan) 0%, #00b4d8 100%);
+  color: #030712;
+  box-shadow: 0 10px 25px -5px rgba(0, 245, 212, 0.4);
+}
+
+.action-primary:active {
+  transform: scale(0.97);
+  box-shadow: 0 5px 15px rgba(0, 245, 212, 0.6);
+}
+
+.action-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.action-secondary:active {
+  transform: scale(0.97);
+  border-color: var(--text-primary);
+}
+
+/* Footer Swipe Down */
+.welcome-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 0 8px 0;
+  cursor: pointer;
+}
+
+.swipe-down-arrow {
+  color: var(--neon-cyan);
+  font-weight: 800;
+  font-size: 1rem;
+  animation: bounceDown 1.6s infinite ease-in-out;
+}
+
+.swipe-down-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   9. Keyframe Animations
+   -------------------------------------------------------------------------- */
+@keyframes pulseLight {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.8); }
+}
+
+@keyframes radarRing {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.8;
+  }
+  70% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+@keyframes soundBarWave {
+  0% { transform: scaleY(0.4); }
+  100% { transform: scaleY(1.3); }
+}
+
+@keyframes floatUp {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes bounceArrow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes bounceDown {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+}
+
+@keyframes orbFloat {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(-30px, 40px) scale(1.15);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   10. Desktop Viewport & Responsive Media Queries
+   -------------------------------------------------------------------------- */
+@media (min-width: 601px) {
+  /* Show Simulator Header */
+  .desktop-controls-bar {
+    display: flex;
+  }
+
+  /* Render phone frame */
+  .phone-frame {
+    width: var(--phone-width);
+    height: var(--phone-height);
+    max-height: 90vh;
+    border-radius: var(--radius-phone);
+    box-shadow: 
+      0 0 0 10px #1e2433,
+      0 0 0 12px #2d3748,
+      0 30px 70px -15px rgba(0, 0, 0, 0.9),
+      0 0 50px rgba(0, 245, 212, 0.12);
+    border: 3px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .phone-speaker-island {
+    display: flex;
+  }
+
+  /* Fullscreen View Mode (When toggled) */
+  .device-simulator.mode-fullscreen .desktop-controls-bar {
+    position: fixed;
+    top: 16px;
+  }
+
+  .device-simulator.mode-fullscreen .phone-frame {
+    width: 100%;
+    height: 100%;
+    max-height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+  }
+
+  .device-simulator.mode-fullscreen .phone-speaker-island {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Clean Native Mobile View */
+  .desktop-controls-bar {
+    display: none !important;
+  }
+
+  .phone-frame {
+    width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+  }
+
+  .phone-speaker-island {
+    display: none !important;
+  }
+}
